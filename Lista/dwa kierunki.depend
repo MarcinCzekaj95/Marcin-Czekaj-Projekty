@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1484474701 source:d:\winapi\dwa kierunki\lista_dwu_kierunkowa.cpp
+	"LISTA_DWU_KIERUNKOWA.h"
+
+1484437987 d:\winapi\dwa kierunki\lista_dwu_kierunkowa.h
+	<iostream>
+	<conio.h>
+	<windows.h>
+
+1484437912 source:d:\winapi\dwa kierunki\main.cpp
+	"LISTA_DWU_KIERUNKOWA.h"
+
