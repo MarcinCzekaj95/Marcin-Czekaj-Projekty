@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1484359697 source:d:\winapi\tictactoe\main.cpp
+	<iostream>
+	<windows.h>
+	<time.h>
+	<conio.h>
+
