@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1484597472 source:d:\winapi\tworzy platformowke 2\main.cpp
+1484598427 source:d:\winapi\tworzy platformowke 2\main.cpp
 	<allegro.h>
 	<iostream>
 	<winalleg.h>
