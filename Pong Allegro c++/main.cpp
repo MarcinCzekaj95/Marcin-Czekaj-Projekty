@@ -39,6 +39,10 @@ struct Vec2
 
 int y1,y2;
 
+float licznik=0.4f;
+
+int sprawdzenie;
+
 float POS_X_CIRCLE,POS_Y_CIRCLE;
 
 //STANY NASZEJ GRY CZYLI CZY JEST ONA W MENU CZY W GRZE CZY KONTYNUJEMY CZY MOZE CHCEMY WYJSC
@@ -46,7 +50,7 @@ enum State
 {
     state_menu,
     state_new_game,
-    state_continue,
+    state_info,
     state_quit
 };
 //POZYCJA NASZEGO MENU W ZMIENNYCH PONIEWAZ JEST TO DOBRY NAWYK BO WSZYSTKO MAMY W JEDNYM MIEJSCU
@@ -86,19 +90,19 @@ void display_menu(State stan)
     switch(stan)
     {
         case state_new_game:
-            textout_centre_ex(buffer,font,"New Game",SCREEN_W/2,Pos_new_game,HighLight,0);
-            textout_centre_ex(buffer,font,"Continue",SCREEN_W/2,Pos_continue,color,0);
-            textout_centre_ex(buffer,font,"Quit",SCREEN_W/2,Pos_quit,color,0);
+            textout_centre_ex(buffer,font,"PLAY",SCREEN_W/2,Pos_new_game,HighLight,0);
+            textout_centre_ex(buffer,font,"INFO",SCREEN_W/2,Pos_continue,color,0);
+            textout_centre_ex(buffer,font,"QUIT",SCREEN_W/2,Pos_quit,color,0);
             break;
-        case state_continue:
-            textout_centre_ex(buffer,font,"New Game",SCREEN_W/2,Pos_new_game,color,0);
-            textout_centre_ex(buffer,font,"Continue",SCREEN_W/2,Pos_continue,HighLight,0);
-            textout_centre_ex(buffer,font,"Quit",SCREEN_W/2,Pos_quit,color,0);
+        case state_info:
+            textout_centre_ex(buffer,font,"PLAY",SCREEN_W/2,Pos_new_game,color,0);
+            textout_centre_ex(buffer,font,"INFO",SCREEN_W/2,Pos_continue,HighLight,0);
+            textout_centre_ex(buffer,font,"QUIT",SCREEN_W/2,Pos_quit,color,0);
             break;
         case state_quit:
-            textout_centre_ex(buffer,font,"New Game",SCREEN_W/2,Pos_new_game,color,0);
-            textout_centre_ex(buffer,font,"Continue",SCREEN_W/2,Pos_continue,color,0);
-            textout_centre_ex(buffer,font,"Quit",SCREEN_W/2,Pos_quit,HighLight,0);
+            textout_centre_ex(buffer,font,"PLAY",SCREEN_W/2,Pos_new_game,color,0);
+            textout_centre_ex(buffer,font,"INFO",SCREEN_W/2,Pos_continue,color,0);
+            textout_centre_ex(buffer,font,"QUIT",SCREEN_W/2,Pos_quit,HighLight,0);
             break;
 
     }
@@ -113,19 +117,36 @@ void display_game(State stan)
     textout_ex(buffer,font,"Player-2 Controls O/L",SCREEN_W-220,30,color,0);
 }
 
+void display_info()
+{
+    int color = makecol(255,0,255);
+    textout_centre_ex(buffer,font,"INFORMACJE",SCREEN_W/2,SCREEN_H/2-250,color,0);
+    textout_centre_ex(buffer,font,"Gra pong w jezyku c++",SCREEN_W/2,SCREEN_H/2-200,color,0);
+    textout_centre_ex(buffer,font,"W bibliotece allegro w wersji 4.0x",SCREEN_W/2,SCREEN_H/2-180,color,0);
+    textout_centre_ex(buffer,font,"Sterowanie Gracz nr:1",SCREEN_W/2,SCREEN_H/2-160,color,0);
+    textout_centre_ex(buffer,font,"W - gora S - Dol",SCREEN_W/2,SCREEN_H/2-140,color,0);
+    textout_centre_ex(buffer,font,"Sterowanie Gracz nr:2",SCREEN_W/2,SCREEN_H/2-120,color,0);
+    textout_centre_ex(buffer,font,"O - gora L - Dol",SCREEN_W/2,SCREEN_H/2-100,color,0);
+    textout_centre_ex(buffer,font,"PAUSE oraz EXIT - Spacja",SCREEN_W/2,SCREEN_H/2-80,color,0);
+
+}
+
 void display_gameplay()
 {
     int value;
+    sprawdzenie=0;
     const int POS_PALLETEONE = 320;
     const int POS_PALLETETWO = 300;
     Vec2 PALLETE_POS = {SCREEN_W/2-POS_PALLETEONE,SCREEN_H/2};
     Vec2 PALLETE2_POS = {SCREEN_W/2+POS_PALLETETWO,SCREEN_H/2};
     int color = makecol(255,255,255);
+    int color2 = makecol(255,255,0);
     rectfill(buffer,PALLETE_POS.x,PALLETE_POS.y+y1,PALLETE_POS.x+10,PALLETE_POS.y-70+y1,color);
     rectfill(buffer,PALLETE2_POS.x,PALLETE2_POS.y+y2,PALLETE2_POS.x+10,PALLETE2_POS.y-70+y2,color);
     circlefill(buffer,SCREEN_W/2 + POS_X_CIRCLE,SCREEN_H/2 + POS_Y_CIRCLE,7,color);
     textprintf(buffer,font,SCREEN_W/2+150,SCREEN_H/2-270,color,"%d",POINTS1);
     textprintf(buffer,font,SCREEN_W/2-170,SCREEN_H/2-270,color,"%d",POINTS2);
+    textout_centre_ex(buffer,font,"PAUSE - SPACE",SCREEN_W/2,SCREEN_H-20,color2,0);
     if(key[KEY_W] && y1!=-180)
     {
         y1--;
@@ -150,10 +171,12 @@ void display_gameplay()
     {
         if(POS_Y_CIRCLE<=-250.0)
         {
+            POS_Y_CIRCLE=-250.0;
             pomocY=1;
         }
         else if(POS_Y_CIRCLE>=250.0)
         {
+            POS_Y_CIRCLE=250.0;
             pomocY=2;
         }
         else if(POS_X_CIRCLE>=350)
@@ -166,30 +189,39 @@ void display_gameplay()
         }
         if(pomocY==1)
         {
-            POS_Y_CIRCLE+=0.6f;
+            POS_Y_CIRCLE+=licznik;
         }
         else if(pomocY==2)
         {
-            POS_Y_CIRCLE-=0.6f;
+            POS_Y_CIRCLE-=licznik;
             //std::cout<<PALLETE2_POS.x<<" "<<PALLETE2_POS.y<<std::endl;
         }
         if(pomocX==1)
         {
-            POS_X_CIRCLE-=0.6f;
+            POS_X_CIRCLE-=licznik;
         }
         else if(pomocX==2)
         {
-            POS_X_CIRCLE+=0.6f;
+            POS_X_CIRCLE+=licznik;
+        }
+        else if(pomocX==3)
+        {
+            POS_X_CIRCLE+=licznik+0.4f;
+        }
+        else if(pomocX==4)
+        {
+            POS_X_CIRCLE-=licznik+0.4f;
         }
         if(POS_X_CIRCLE>=349.0)
         {
+            licznik=0.4f;
             POS_X_CIRCLE=0;
             POS_Y_CIRCLE=0;
             POINTS2++;
         }
         else if(POS_X_CIRCLE<=-349.0)
         {
-
+            licznik=0.4f;
             POS_X_CIRCLE=0;
             POS_Y_CIRCLE=0;
             POINTS1++;
@@ -197,25 +229,51 @@ void display_gameplay()
         if(((POS_Y_CIRCLE+399) >=(PALLETE_POS.y+y1) && (POS_Y_CIRCLE+300)<=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
         {
             pomocX=2;
-            if(((POS_Y_CIRCLE+300)<=(PALLETE_POS.y+y1) && (POS_Y_CIRCLE+349) >=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
+            if(((POS_Y_CIRCLE+302)<=(PALLETE_POS.y+y1) && (POS_Y_CIRCLE+348) >=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
             {
                 pomocY=1;
+                if(licznik<=1.2f)licznik+=0.1f;
             }
-            else if(((POS_Y_CIRCLE+348)<=(PALLETE_POS.y+y1) && (POS_Y_CIRCLE+399) >=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
+            else if(((POS_Y_CIRCLE+348)<=(PALLETE_POS.y+y1) && (POS_Y_CIRCLE+397) >=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
             {
                 pomocY=2;
+            }
+            if(((POS_Y_CIRCLE+302)<=(PALLETE_POS.y+y1)&&(POS_Y_CIRCLE+324) >=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
+            {
+                pomocX=2;
+            }
+            else if(((POS_Y_CIRCLE+324)<=(PALLETE_POS.y+y1)&&(POS_Y_CIRCLE+371) >=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
+            {
+                pomocX=3;
+            }
+            else if(((POS_Y_CIRCLE+371)<=(PALLETE_POS.y+y1)&&(POS_Y_CIRCLE+399) >=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
+            {
+                pomocX=2;
             }
         }
         else if(((POS_Y_CIRCLE+399) >=(PALLETE2_POS.y+y2) && (POS_Y_CIRCLE+300)<=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
         {
             pomocX=1;
-            if(((POS_Y_CIRCLE+300)<=(PALLETE2_POS.y+y2) && (POS_Y_CIRCLE+349) >=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
+            if(((POS_Y_CIRCLE+302)<=(PALLETE2_POS.y+y2) && (POS_Y_CIRCLE+348) >=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
             {
                 pomocY=1;
+                if(licznik<=1.2f)licznik+=0.1f;
             }
-            else if(((POS_Y_CIRCLE+348)<=(PALLETE2_POS.y+y2) && (POS_Y_CIRCLE+399) >=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
+            else if(((POS_Y_CIRCLE+348)<=(PALLETE2_POS.y+y2) && (POS_Y_CIRCLE+397) >=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
             {
                 pomocY=2;
+            }
+            if(((POS_Y_CIRCLE+302)<=(PALLETE2_POS.y+y2)&&(POS_Y_CIRCLE+324) >=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
+            {
+                pomocX=1;
+            }
+            else if(((POS_Y_CIRCLE+324)<=(PALLETE2_POS.y+y2)&&(POS_Y_CIRCLE+371) >=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
+            {
+                pomocX=4;
+            }
+            else if(((POS_Y_CIRCLE+371)<=(PALLETE2_POS.y+y2)&&(POS_Y_CIRCLE+399) >=(PALLETE2_POS.y+y2)) && (POS_X_CIRCLE>=290&&POS_X_CIRCLE<=310))
+            {
+                pomocX=1;
             }
         }
     }
@@ -224,25 +282,20 @@ void display_gameplay()
 
 }
 
-void display_continue(State stan)
-{
-    int color = makecol(255,255,255);
-    textout_centre_ex(buffer,font,"GAME CONTINUE",SCREEN_W/2,SCREEN_H/2,color,0);
-}
-
 State Pause(int * stan)
 {
-    if(key[KEY_P])
+    if(key[KEY_SPACE])
     {
         return state_menu;
     }
     if(*stan==1)
     {
+        sprawdzenie = 1;
         return state_new_game;
     }
     else if(*stan==2)
     {
-        return state_continue;
+        return state_info;
     }
 }
 
@@ -316,7 +369,7 @@ int main()
                 case state_new_game:
                     stan = Pause(&currentState);
                     break;
-                case state_continue:
+                case state_info:
                     stan = Pause(&currentState);
                     break;
                 case state_quit:
@@ -336,8 +389,8 @@ int main()
                 display_game(State(currentState));
                 display_gameplay();
                 break;
-            case state_continue:
-                display_continue(State(currentState));
+            case state_info:
+                display_info();
                 break;
             case state_quit:
                 exit(0);
