@@ -27,9 +27,12 @@ LOCK_FUNCTION(increment_speed);
 BITMAP * buffer;
 
 int RANDOMIZE;
+int RANDOMIZE2;
 int pomocY,pomocX;
 
 int POINTS1,POINTS2;
+
+bool WINNER = false;
 
 //Pozycja paletki w grze
 struct Vec2
@@ -39,7 +42,7 @@ struct Vec2
 
 int y1,y2;
 
-float licznik=0.4f;
+float licznik=0.2f;
 
 int sprawdzenie;
 
@@ -135,6 +138,42 @@ void display_gameplay()
 {
     int value;
     sprawdzenie=0;
+    if(key[KEY_5])
+    {
+        WINNER=false;
+        y1=0;
+        y2=0;
+        POS_X_CIRCLE=0;
+        POS_Y_CIRCLE=0;
+        licznik=0.2f;
+        POINTS1=0;
+        POINTS2=0;
+        RANDOMIZE=rand()%2;
+        RANDOMIZE2=rand()%50;
+        if(RANDOMIZE==1)
+        {
+            pomocX=1;
+            if(RANDOMIZE2>=0 && RANDOMIZE2<24)pomocY=1;
+            else if(RANDOMIZE2>=24 && RANDOMIZE2<=50)pomocY=2;
+        }
+        else
+        {
+            pomocX=2;
+            if(RANDOMIZE2>=0 && RANDOMIZE2<24)pomocY=1;
+            else if(RANDOMIZE2>=24 && RANDOMIZE2<=50)pomocY=2;
+        }
+    }
+
+    if(WINNER==true)
+    {
+        y1=0;
+        y2=0;
+        POS_X_CIRCLE=0;
+        POS_Y_CIRCLE=0;
+        licznik=0.4f;
+    }
+    else
+    {
     const int POS_PALLETEONE = 320;
     const int POS_PALLETETWO = 300;
     Vec2 PALLETE_POS = {SCREEN_W/2-POS_PALLETEONE,SCREEN_H/2};
@@ -147,6 +186,7 @@ void display_gameplay()
     textprintf(buffer,font,SCREEN_W/2+150,SCREEN_H/2-270,color,"%d",POINTS1);
     textprintf(buffer,font,SCREEN_W/2-170,SCREEN_H/2-270,color,"%d",POINTS2);
     textout_centre_ex(buffer,font,"PAUSE - SPACE",SCREEN_W/2,SCREEN_H-20,color2,0);
+    textout_centre_ex(buffer,font,"PAUSE - 5",SCREEN_W/2,SCREEN_H/2-280,color2,0);
     if(key[KEY_W] && y1!=-180)
     {
         y1--;
@@ -214,17 +254,21 @@ void display_gameplay()
         }
         if(POS_X_CIRCLE>=349.0)
         {
-            licznik=0.4f;
+            licznik=0.2f;
             POS_X_CIRCLE=0;
             POS_Y_CIRCLE=0;
             POINTS2++;
         }
         else if(POS_X_CIRCLE<=-349.0)
         {
-            licznik=0.4f;
+            licznik=0.2f;
             POS_X_CIRCLE=0;
             POS_Y_CIRCLE=0;
             POINTS1++;
+        }
+        if(POINTS1==12 || POINTS2==12)
+        {
+            WINNER=true;
         }
         if(((POS_Y_CIRCLE+399) >=(PALLETE_POS.y+y1) && (POS_Y_CIRCLE+300)<=(PALLETE_POS.y+y1)) && (POS_X_CIRCLE<=-300&&POS_X_CIRCLE>=-320))
         {
@@ -276,6 +320,7 @@ void display_gameplay()
                 pomocX=1;
             }
         }
+    }
     }
 
 
@@ -333,16 +378,19 @@ int main()
     int color = makecol(255,255,255);
     float interpolation;
 
-    RANDOMIZE = rand()%2;
+    RANDOMIZE=rand()%2;
+    RANDOMIZE2=rand()%50;
     if(RANDOMIZE==1)
     {
-        pomocY=1;
         pomocX=1;
+        if(RANDOMIZE2>=0 && RANDOMIZE2<24)pomocY=1;
+        else if(RANDOMIZE2>=24 && RANDOMIZE2<=50)pomocY=2;
     }
     else
     {
-        pomocY=2;
         pomocX=2;
+        if(RANDOMIZE2>=0 && RANDOMIZE2<24)pomocY=1;
+        else if(RANDOMIZE2>=24 && RANDOMIZE2<=50)pomocY=2;
     }
     buffer = create_bitmap(SCREEN_W,SCREEN_H);
     if(!buffer)
