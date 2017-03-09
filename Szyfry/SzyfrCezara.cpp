@@ -1,7 +1,7 @@
 #include "SzyfrCezara.h"
 
 SzyfrCezara::SzyfrCezara(string n)
-    :napis(n),CzyMoznaDeszyfrowac(false)
+    :napis(n),CzyMoznaDeszyfrowac(false),CzyMoznaSzyfrowac(false)
 {
 
 }
@@ -14,52 +14,65 @@ SzyfrCezara::~SzyfrCezara()
 void SzyfrCezara::Cezar()
 {
     int i=0;
+    if(CzyMoznaSzyfrowac == true)
+    {
     cin>>ile;
     while(i<napis.length())
     {
-        if(napis[i]>='A'&&napis[i]<='Z')
-        {
-            napis[i]+=(ile%25);
-            if(napis[i]>'Z')
+            if(napis[i]>='A'&&napis[i]<='Z')
             {
-                napis[i]=(napis[i]-90) + 64;
+                napis[i]+=(ile%26);
+                if(napis[i]>'Z')
+                {
+                    napis[i]=(napis[i]-90) + 64;
+                }
+                else if(napis[i]<'A')
+                {
+                    napis[i]=90-(64-napis[i]);
+                }
             }
-            else if(napis[i]<'A')
+            else if(napis[i]>='a'&&napis[i]<='z')
             {
-                napis[i]=91-(65-napis[i]);
+                napis[i]-=32;
+                napis[i]+=(ile%26);
+                if(napis[i]>'Z')
+                {
+                    napis[i]=(napis[i]-90) + 64;
+                }
+                else if(napis[i]<'A')
+                {
+                    napis[i]=90-(64-napis[i]);
+                }
+                napis[i]+=32;
             }
+            else if(napis[i]>='0'&&napis[i]<='9')
+            {
+                napis[i]+=(ile%10);
+                if(napis[i]>'9')
+                {
+                    napis[i]=(napis[i]-57) + 47;
+                }
+                else if(napis[i]<'0')
+                {
+                    napis[i]=58-(48-napis[i]);
+                }
+            }
+            i++;
         }
-        else if(napis[i]>='a'&&napis[i]<='z')
-        {
-            napis[i]-=32;
-            napis[i]+=(ile%25);
-            if(napis[i]>'Z')
-            {
-                napis[i]=(napis[i]-90) + 64;
-            }
-            else if(napis[i]<'A')
-            {
-                napis[i]=91-(65-napis[i]);
-            }
-            napis[i]+=32;
-        }
-        else if(napis[i]>='0'&&napis[i]<='9')
-        {
-            napis[i]+=(ile%10);
-            if(napis[i]>'9')
-            {
-                napis[i]=(napis[i]-57) + 47;
-            }
-            else if(napis[i]<'0')
-            {
-                napis[i]=58-(48-napis[i]);
-            }
-        }
-        i++;
     }
-    i=0;
+    else
+    {
+        cout<<"Nie mozna szyfrowac zaszyfrowanego zdania"<<endl;
+    }
     cout<<endl;
+    plik.open("Cezar/ZaszyfrowanyTekst.txt",ios::out);
+    if(plik.is_open())
+    {
+        plik<<napis;
+        plik.close();
+    }
     CzyMoznaDeszyfrowac=true;
+    CzyMoznaSzyfrowac = false;
 }
 
 
@@ -73,27 +86,27 @@ void SzyfrCezara::DeszyfracjaCezara()
         {
             if(napis[i]>='A'&&napis[i]<='Z')
             {
-                napis[i]+=(ile%25);
+                napis[i]+=(ile%26);
                 if(napis[i]>'Z')
                 {
                     napis[i]=(napis[i]-90) + 64;
                 }
                 else if(napis[i]<'A')
                 {
-                    napis[i]=91-(65-napis[i]);
+                    napis[i]=90-(64-napis[i]);
                 }
             }
             else if(napis[i]>='a'&&napis[i]<='z')
             {
                 napis[i]-=32;
-                napis[i]+=(ile%25);
+                napis[i]+=(ile%26);
                 if(napis[i]>'Z')
                 {
                     napis[i]=(napis[i]-90) + 64;
                 }
                 else if(napis[i]<'A')
                 {
-                    napis[i]=91-(65-napis[i]);
+                    napis[i]=90-(64-napis[i]);
                 }
                 napis[i]+=32;
             }
@@ -113,7 +126,14 @@ void SzyfrCezara::DeszyfracjaCezara()
         }
         i=0;
         cout<<endl;
+        plik.open("Cezar/Deszyfracja.txt",ios::out);
+        if(plik.is_open())
+        {
+            plik<<napis;
+            plik.close();
+        }
         CzyMoznaDeszyfrowac=false;
+        CzyMoznaSzyfrowac = true;
     }
     else
     {
@@ -125,8 +145,19 @@ void SzyfrCezara::DeszyfracjaCezara()
 void SzyfrCezara::napisz()
 {
     napis="";
-    cin>>napis;
+    getline(cin,napis,'+');
+
+    plik.open("Cezar/Zdanie.txt",ios::out);
+
+    if(plik.is_open())
+    {
+        cout<<"Udalo sie"<<endl;
+        plik<<napis;
+        plik.close();
+    }
     system("cls");
+
+    CzyMoznaSzyfrowac = true;
 }
 
 void SzyfrCezara::SwitchCezara()
@@ -155,7 +186,7 @@ void SzyfrCezara::SwitchCezara()
         switch(wybor)
         {
             case '1':
-                cout<<"Podaj napis: ";
+                cout<<"(Wcisnij plus aby zakonczyc pisanie) Podaj napis: ";
                 napisz();
                 break;
             case '2':

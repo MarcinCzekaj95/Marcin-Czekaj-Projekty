@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include <fstream>
 #include <string>
 
 using namespace std;
@@ -7,9 +8,11 @@ using namespace std;
 
 class SzyfrCezara
 {
+    fstream plik;
     long long ile;
     string napis;
     bool CzyMoznaDeszyfrowac;
+    bool CzyMoznaSzyfrowac;
 public:
 
     SzyfrCezara(string);
