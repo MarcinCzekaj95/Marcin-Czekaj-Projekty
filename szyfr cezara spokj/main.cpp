@@ -14,7 +14,7 @@ int main()
         cout<<"MENU"<<endl;
         cout<<"1 - Szyfr Cezara"<<endl;
         cout<<"2 - Szyfr Vigenere'a"<<endl;
-        cout<<"3 - Szyfr PlayFair"<<endl;
+        cout<<"3 - Szyfr Playfair"<<endl;
         cout<<"4 - exit"<<endl;
         cin>>wybor;
         system("cls");

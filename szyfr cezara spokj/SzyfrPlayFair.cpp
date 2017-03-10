@@ -245,6 +245,7 @@ void SzyfrPlayFair::PodajNapis()
     cin>>napis;
     cout<<"Podaj tekst to zaszyfrowania: ";
     cin>>tekst;
+    transform(tekst.begin(),tekst.end(),tekst.begin(),::tolower);
     napisPoprawny = napis;
     while(licznik < napis.length())
     {
