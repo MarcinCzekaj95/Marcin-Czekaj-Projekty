@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1489151733 source:d:\uczelniane projekty\szyfr cezara spokj\main.cpp
+	"SzyfrCezara.h"
+	"SzyfrKlucz.h"
+
+1489083528 d:\uczelniane projekty\szyfr cezara spokj\szyfrcezara.h
+	<iostream>
+	<windows.h>
+	<fstream>
+	<string>
+
+1489133388 source:d:\uczelniane projekty\szyfr cezara spokj\szyfrcezara.cpp
+	"SzyfrCezara.h"
+
+1489089877 source:d:\uczelniane projekty\szyfr cezara spokj\szyfrklucz.cpp
+	"SzyfrKlucz.h"
+
+1489082139 d:\uczelniane projekty\szyfr cezara spokj\szyfrklucz.h
+	<iostream>
+	<fstream>
+	<windows.h>
+	<string>
+
