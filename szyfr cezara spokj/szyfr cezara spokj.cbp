@@ -37,6 +37,8 @@
 		<Unit filename="SzyfrCezara.h" />
 		<Unit filename="SzyfrKlucz.cpp" />
 		<Unit filename="SzyfrKlucz.h" />
+		<Unit filename="SzyfrPlayFair.cpp" />
+		<Unit filename="SzyfrPlayFair.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
