@@ -4,6 +4,7 @@
 class SzyfrPlayFair
 {
     string napis,napisPoprawny,tekst;
+    bool czyMoznaSzyfrowac,czyMoznaDeszyfrowac;
     char tablica[5][5];
     int licznik,licznik2,liczbaElementow;
     char litera;
@@ -23,6 +24,7 @@ public:
 };
 
 SzyfrPlayFair::SzyfrPlayFair(string n)
+    :czyMoznaSzyfrowac(true),czyMoznaDeszyfrowac(false)
 {
     napis = n;
     licznik = 0;
@@ -47,6 +49,8 @@ void SzyfrPlayFair::Szyfruj()
 {
     int licz=0,k1=0,m1=0,k2=0,m2=0;
     char pomoc[2];
+    if(czyMoznaSzyfrowac==true)
+    {
     while(licz < tekst.length())
     {
         for(int i=0;i<5;i++)
@@ -65,28 +69,198 @@ void SzyfrPlayFair::Szyfruj()
                 {
                     k1=i;
                     m1=j;
-                    cout<<licz<<": ("<<k1<<","<<m1<<")"<<endl;
+                    cout<<licz<<": ("<<k1<<","<<m1<<")"<<" "<<tekst[licz]<<endl;
                 }
                 if(tablica[i][j]==tekst[licz+1])
                 {
                     k2=i;
                     m2=j;
-                    cout<<licz<<": ("<<k2<<","<<m2<<")"<<endl;
+                    cout<<licz<<": ("<<k2<<","<<m2<<")"<<" "<<tekst[licz+1]<<endl;
                 }
             }
         }
+        if(m1==m2)
+        {
+            if(k1==0)
+            {
+                tekst[licz] = tablica[k1+1][m1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz] = tablica[k1-1][m1];
+            }
+            else
+            {
+                tekst[licz] = tablica[k1+1][m1];
+            }
+            if(k2==0)
+            {
+                tekst[licz+1] = tablica[k2+1][m1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz+1] = tablica[k2-1][m1];
+            }
+            else
+            {
+                tekst[licz+1] = tablica[k2+1][m1];
+            }
+
+        }
+        else if(k1==k2)
+        {
+            if(m1==0)
+            {
+                tekst[licz] = tablica[k1][m1+1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz] = tablica[k1][m1-1];
+            }
+            else
+            {
+                tekst[licz] = tablica[k1][m1+1];
+            }
+            if(k2==0)
+            {
+                tekst[licz+1] = tablica[k2][m2+1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz+1] = tablica[k2][m2-1];
+            }
+            else
+            {
+                tekst[licz+1] = tablica[k2][m2+1];
+            }
+        }
+        else
+        {
+            tekst[licz] = tablica[k1][m2];
+            tekst[licz+1] = tablica[k2][m1];
+        }
         licz+=2;
+    }
+    czyMoznaSzyfrowac=false;
+    czyMoznaDeszyfrowac=true;
+    }
+    else
+    {
+        cout<<"Nie mozna szyfrowac zaszyfrowanego"<<endl;
     }
     cout<<tekst<<endl;
 }
 
 void SzyfrPlayFair::Deszyfruj()
 {
+        int licz=0,k1=0,m1=0,k2=0,m2=0;
+    char pomoc[2];
+    if(czyMoznaDeszyfrowac==true)
+    {
+    while(licz < tekst.length())
+    {
+        for(int i=0;i<5;i++)
+        {
+            for(int j=0;j<5;j++)
+            {
+                if(tekst.length()%2!=0)
+                {
+                    tekst+="q";
+                }
+                if(tekst[licz]==tekst[licz+1])
+                {
+                    tekst[licz+1]='x';
+                }
+                if(tablica[i][j]==tekst[licz])
+                {
+                    k1=i;
+                    m1=j;
+                    cout<<licz<<": ("<<k1<<","<<m1<<")"<<" "<<tekst[licz]<<endl;
+                }
+                if(tablica[i][j]==tekst[licz+1])
+                {
+                    k2=i;
+                    m2=j;
+                    cout<<licz<<": ("<<k2<<","<<m2<<")"<<" "<<tekst[licz+1]<<endl;
+                }
+            }
+        }
+        if(m1==m2)
+        {
+            if(k1==0)
+            {
+                tekst[licz] = tablica[k1+1][m1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz] = tablica[k1-1][m1];
+            }
+            else
+            {
+                tekst[licz] = tablica[k1-1][m1];
+            }
+            if(k2==0)
+            {
+                tekst[licz+1] = tablica[k2+1][m1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz+1] = tablica[k2-1][m1];
+            }
+            else
+            {
+                tekst[licz+1] = tablica[k2-1][m1];
+            }
 
+        }
+        else if(k1==k2)
+        {
+            if(m1==0)
+            {
+                tekst[licz] = tablica[k1][m1+1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz] = tablica[k1][m1-1];
+            }
+            else
+            {
+                tekst[licz] = tablica[k1][m1-1];
+            }
+            if(k2==0)
+            {
+                tekst[licz+1] = tablica[k2][m2+1];
+            }
+            else if(k1==4)
+            {
+                tekst[licz+1] = tablica[k2][m2-1];
+            }
+            else
+            {
+                tekst[licz+1] = tablica[k2][m2-1];
+            }
+        }
+        else
+        {
+            tekst[licz] = tablica[k1][m2];
+            tekst[licz+1] = tablica[k2][m1];
+        }
+        licz+=2;
+    }
+    czyMoznaDeszyfrowac=false;
+    czyMoznaSzyfrowac = true;
+    }
+    else
+    {
+        cout<<"Nie mozna deszyfrowac odszyfrowanego"<<endl;
+    }
+    cout<<tekst<<endl;
 }
 
 void SzyfrPlayFair::PodajNapis()
 {
+    czyMoznaDeszyfrowac = false;
+    czyMoznaSzyfrowac = true;
     licznik = 0;
     licznik2 = 0;
     litera = 'a';
