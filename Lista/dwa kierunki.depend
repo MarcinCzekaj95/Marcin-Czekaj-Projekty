@@ -10,3 +10,14 @@
 1484437912 source:d:\winapi\dwa kierunki\main.cpp
 	"LISTA_DWU_KIERUNKOWA.h"
 
+1488611064 source:d:\git marcin czekaj\lista\lista_dwu_kierunkowa.cpp
+	"LISTA_DWU_KIERUNKOWA.h"
+
+1488611064 d:\git marcin czekaj\lista\lista_dwu_kierunkowa.h
+	<iostream>
+	<conio.h>
+	<windows.h>
+
+1488611064 source:d:\git marcin czekaj\lista\main.cpp
+	"LISTA_DWU_KIERUNKOWA.h"
+
